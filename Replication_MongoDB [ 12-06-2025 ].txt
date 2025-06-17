@@ -1,0 +1,51 @@
+MongoDB Replication Setup
+On 12th of June 2025, we worked on setting up replication in MongoDB. Below are the steps we performed during the class:
+
+1] Navigated to the MongoDB installation directory:
+
+cd \
+cd "Program Files"
+cd MongoDB
+cd Server
+cd 8.0
+cd bin
+This allowed us to access the MongoDB server binaries needed to start the replica set instances.
+
+2]  Created data directories for the replica set members:
+
+cd \
+mkdir data
+cd data
+mkdir db0
+mkdir db1
+mkdir db2
+Here, we created separate directories (db0, db1, db2) to store data for each replica node.
+
+3] Started three MongoDB instances as replica set members:
+
+mongod --port 27017 --dbpath "C:\data\db0" --replSet "rs0" --bind_ip localhost
+mongod --port 27018 --dbpath "C:\data\db1" --replSet "rs0" --bind_ip localhost
+mongod --port 27019 --dbpath "C:\data\db2" --replSet "rs0" --bind_ip localhost
+Each instance was started on a different port with rs0 as the replica set name.
+
+4]  Connected to the primary MongoDB instance:
+
+mongosh --port 27017
+This connected us to the first node, from where we could configure the replica set.
+
+5]  Initiated the replica set and added members:
+
+rs.initiate({ 
+  _id: "rs0", 
+  members: [ 
+    { _id: 0, host: "localhost:27017" }, 
+    { _id: 1, host: "localhost:27018" }, 
+    { _id: 2, host: "localhost:27019" } 
+  ] 
+})
+This command initialized the replica set with three members.
+
+6]  Checked the replica set status:
+
+rs.status()
+We used this command to verify that all members were added successfully and the replica set was working correctly.
